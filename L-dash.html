@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Global Styles */
+    body, a, div {
+      font-family: Arial, sans-serif;
+    }
+
+    /* Keyframes for animations */
+    @keyframes slideIn {
+      from {
+        margin-left: -250px;
+      }
+      to {
+        margin-left: 0;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* L-shaped Menu */
+    #wrapper {
+      display: grid;
+      grid-template-columns: 250px auto;
+      grid-template-rows: 50px auto;
+    }
+
+    #top-header, #left-sidebar {
+      background-color: #333;
+      color: white;
+    }
+
+    #top-header {
+      grid-column: 1 / 3;
+      grid-row: 1 / 2;
+      display: flex;
+      justify-content: space-between;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    #left-sidebar {
+      grid-column: 1 / 2;
+      grid-row: 2 / 3;
+      overflow-y: auto;
+      animation: slideIn 0.5s ease-in-out;
+    }
+
+    #main-content {
+      grid-column: 2 / 3;
+      grid-row: 2 / 3;
+    }
+
+    /* Dashboard highlight */
+    .dashboard-link {
+      background-color: #555;
+    }
+
+    #top-header a, #left-sidebar a {
+      padding: 10px;
+      text-decoration: none;
+      color: white;
+      display: block;
+    }
+
+    /* Hover effects */
+    #top-header a:hover, #left-sidebar a:hover {
+      background-color: #555;
+    }
+            /* Global & Layout */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #2C2F33;
+            color: #FFFFFF;
+        }
+        .auth-buttons, .form-container {
+            max-width: 800px;
+            margin: auto;
+        }
+        /* Authentication Buttons */
+        .auth-buttons {
+            text-align: right;
+            padding: 20px;
+        }
+        .auth-buttons button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #7289DA;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .auth-buttons button:hover {
+            background-color: #5a6dad;
+        }
+        /* Form Styles */
+        .form-container {
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #23272A;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        input[type="text"], input[type="email"], input[type="url"], input[type="file"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border-radius: 4px;
+            background: #2C2F33;
+            border: 1px solid #7289DA;
+            color: white;
+        }
+        input[type="submit"] {
+            background-color: #7289DA;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #5a6dad;
+        }
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        .modal-content {
+            background-color: #23272A;
+            margin: 15% auto;
+            padding: 20px;
+            width: 30%;
+            text-align: center;
+        }
+  </style>
+</head>
+<body>
+
+<div id="wrapper">
+  <!-- Top Header -->
+  <div id="top-header">
+    <a href="#"onclick="loadDashboard()" class="dashboard-link">Dashboard</a>
+    <a href="#https://frizonai.com/">Home</a>
+    <a href="#https://www.frizonai.com/">AI-ChatBots</a>
+    <a href="#https://www.frizonai.com/blank-1">Website-bot</a>
+    <a href="#https://www.frizonai.com/">File-bot</a>
+    <a href="#https://www.frizonai.com/">Audio-bot</a>
+    <a href="#https://www.frizonai.com/blank-9">Video-bot</a>
+    <a href="#https://www.frizonai.com/blank-5">Chat Bot</a>
+    <a href="#https://www.frizonai.com/home">Code-bot</a>
+    <a href="#https://www.frizonai.com/blank-8">Image-bot</a>
+    <a href="#https://www.frizonai.com/blank-2">App-bot</a>
+    <a href="#https://www.frizonai.com/blank-12">eCommerce-bot</a>
+    <a href="#https://www.frizonai.com/blank-4">SEO-bot</a>
+    <a href="#https://www.frizonai.com/blank-10">Analyst-bot</a>
+    <a href="#https://www.frizonai.com/members-area">Profile</a>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div id="left-sidebar">
+    <a href="#https://.com/" onclick="loadDashboard()" class="dashboard-link">Dashboard</a>
+    <a href="#https://.com/">My AI-ChatBots</a>
+    <a href="#https://www.frizonai.com/">eCommerce</a>
+    <a href="#https://www.frizonai.com/">Social Media</a>
+    <a href="#https://www.frizonai.com/">Integrations</a>
+    <a href="#https://linktr.ee/frizonbuilds">Services</a>
+    <a href="#https://frizonbuilds.com/pages/ai-for-social-media">SEO</a>
+    <a href="#https://frizonbuilds.com/pages/crm">CRM</a>
+    <a href="#https://www.frizonai.com/">File Cloud</a>
+      <a href="#https://www.frizonai.com/">API</a>
+      <a href="#https://www.frizonai.com">CMS</a>
+    <a href="#https://www.frizonai.com/">Marketing</a>
+    <a href="#https://www.frizonai.com/">Brand</a>
+    <a href="#https://www.frizonai.com/">Site Discovery</a>
+    <a href="#https://www.frizonai.com/">Google</a>
+    <a href="#https://www.frizonai.com/">AWS</a>
+    <a href="#https://www.frizonai.com/">Drop Shipping</a>
+    <a href="#https://www.frizonai.com/">Products & Catalogs</a>
+    <a href="#https://www.frizonai.com/">SAS</a>
+    <a href="#https://www.frizonai.com/">SAP</a>
+    <a href="#https://www.frizonai.com/">Templates</a>
+    <a href="#https://www.frizonai.com/">Themes</a>
+    <a href="#https://www.frizonai.com/">Media</a>
+    <a href="#https://www.frizonai.com/">Admin API</a>
+    <a href="#https://www.frizonai.com/">Settings</a>
+    <a href="#https://frizonbuilds.com/">Friz Builds</a>
+    <a href="#https://www.frizonapp.com/">Friz App</a>>
+    <a href="#https://account.frizobuilds.com">Login</a>
+    <a href="#https://www.frizonai.com/">Contact Friz AI</a>
+  </div>
+
+  <!-- Main Content -->
+  <div id="main-content">
+    <!-- Your main content goes here -->
+  </div>
+</div>
+
+<script>
+  function loadDashboard() {
+    // Your code to load the dashboard
+    alert("Dashboard loaded for both top header and left sidebar");
+  }
+// Initialize chatbot UI
+function initChatBot() {
+  const chatbotHTML = `
+    <div id="chat-interface">
+      <div id="chat-window"></div>
+      <input type="text" id="user-input" placeholder="Type a message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  `;
+  document.getElementById("chatbot").innerHTML = chatbotHTML;
+}
+
+// Simulate chatbot response
+function getChatBotResponse(userMessage) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("Hello, this is Friz AI. How may I assist you?");
+    }, 1000);
+  });
+}
+
+// Send message
+async function sendMessage() {
+  const userInput = document.getElementById("user-input").value;
+  const chatWindow = document.getElementById("chat-window");
+
+  chatWindow.innerHTML += `<div>User: ${userInput}</div>`;
+  document.getElementById("user-input").value = "";
+
+  const chatBotResponse = await getChatBotResponse(userInput);
+  chatWindow.innerHTML += `<div>Friz AI: ${chatBotResponse}</div>`;
+}
+</script>
+</body>
+</html>
