@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Frizon AI - Advanced Business Software Solutions</title>
+    <style>
+        /* Global & Layout */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #2C2F33;
+            color: #FFFFFF;
+        }
+        .auth-buttons, .form-container {
+            max-width: 800px;
+            margin: auto;
+        }
+        /* Authentication Buttons */
+        .auth-buttons {
+            text-align: right;
+            padding: 20px;
+        }
+        .auth-buttons button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #7289DA;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .auth-buttons button:hover {
+            background-color: #5a6dad;
+        }
+        /* Form Styles */
+        .form-container {
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #23272A;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        input[type="text"], input[type="email"], input[type="url"], input[type="file"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border-radius: 4px;
+            background: #2C2F33;
+            border: 1px solid #7289DA;
+            color: white;
+        }
+        input[type="submit"] {
+            background-color: #7289DA;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #5a6dad;
+        }
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        .modal-content {
+            background-color: #23272A;
+            margin: 15% auto;
+            padding: 20px;
+            width: 30%;
+            text-align: center;
+        }
+        /* Existing Styles */
+        /* ... */
+
+        /* New Styles for AI Section */
+        .ai-section {
+            margin-top: 40px;
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .ai-button {
+            margin-top: 10px;
+        }
+
+        /* Animated Footer */
+        footer {
+            animation: footerAnimation 10s infinite;
+        }
+
+        /* Keyframe Animations */
+        @keyframes footerAnimation {
+            0% { background-color: red; }
+            25% { background-color: yellow; }
+            50% { background-color: blue; }
+            75% { background-color: green; }
+            100% { background-color: red; }
+        } /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            animation: fadeIn 1s;
+        }
+
+        /* AI ChatBot Styles */
+        .chat-container {
+            max-width: 80%;
+            margin: 5% auto;
+            background-color: #333;
+            border-radius: 5px;
+            animation: slideUp 0.5s ease;
+        }
+
+        .chat-box {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 10px;
+            animation: fadeIn 1s;
+        }
+
+        /* Advanced Code Generator Styles */
+        #advancedCodeGenerator {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 15px;
+        }
+
+        #codeDisplay {
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #fff;
+            color: #333;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); }
+            to   { transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Main Header -->
+    <h1 class="animated-title" onclick="toggleAnimation()">AI Chatbot</h1>
+
+    <!-- AI ChatBot Section -->
+    <div class="chat-wrapper">
+        <div class="chat-container">
+            <h1 class="chat-title animated-text">Frizon AI Chatbot</h1>
+            <div id="chatBox" class="chat-box"></div>
+            <input id="userInput" type="text" placeholder="Type your message...">
+            <button onclick="handleInput()">Send</button>
+        </div>
+    </div>
+
+    <!-- Advanced Code Generator and Management -->
+    <div id="advancedCodeGenerator">
+        <h2>Advanced Code Generator</h2>
+        <button onclick="generateCode()">Generate Code</button>
+        <div id="codeDisplay"></div>
+        <h3>Code History</h3>
+        <ul id="historyList"></ul>
+    </div>
+  <script>
+        // AI ChatBot Logic
+        function handleInput() {
+            const inputElement = document.getElementById('userInput');
+            const chatBox = document.getElementById('chatBox');
+            const text = inputElement.value;
+            // Generate a chatbot response here
+            chatBox.innerHTML += `
+                <div class="user-message">${text}</div>
+                <div class="bot-message">Bot Response</div>
+            `;
+            inputElement.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Advanced Code Generator Logic
+        let codeHistory = [];
+
+        function generateCode() {
+            const generatedCode = `// AI generated code: ${Math.random().toString(36).substring(2, 15)}`;
+            addCodeToHistory(generatedCode);
+            document.getElementById('codeDisplay').innerText = generatedCode;
+        }
+
+        function addCodeToHistory(code) {
+            codeHistory.push(code);
+            updateCodeHistoryList();
+        }
+
+        function updateCodeHistoryList() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            codeHistory.forEach((code, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Version ${index + 1}`;
+                listItem.onclick = () => { document.getElementById('codeDisplay').innerText = code; };
+                historyList.appendChild(listItem);
+            });
+           let isDarkTheme = false;
+        const savedCodeKey = 'SAVED_CODE';
+        let multipleFiles = []; // Placeholder for multiple files
+
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            window.editor = monaco.editor.create(document.getElementById('editor'), {
+                value: '',
+                language: 'html',
+                theme: 'vs-light'
+            });
+
+            function toggleTheme() {
+                isDarkTheme = !isDarkTheme;
+                monaco.editor.setTheme(isDarkTheme ? 'vs-dark' : 'vs');
+                document.body.style.backgroundColor = isDarkTheme ? '#1e1e1e' : '#f4f4f4';
+            }
+
+            function changeLanguage() {
+                const language = document.getElementById('languageSelect').value;
+                monaco.editor.setModelLanguage(editor.getModel(), language);
+            }
+
+            function sendMessage() {
+                const userInput = document.getElementById('userInput').value;
+                if (userInput.includes('suggest')) {
+                    // AI-based code suggestion logic here
+                }
+                document.getElementById('userInput').value = '';
+            }
+
+            function compileAndRun() {
+                try {
+                    const code = editor.getValue();
+                    // Code execution logic here
+                    // AI-based code analysis here
+                    document.getElementById('errorOutput').textContent = 'Code Compiled Successfully';
+                } catch (error) {
+                    document.getElementById('errorOutput').textContent = error.message;
+                }
+            }
+
+            function saveCode() {
+                const code = editor.getValue();
+                localStorage.setItem(savedCodeKey, code);
+            }
+
+            function loadCode() {
+                const savedCode = localStorage.getItem(savedCodeKey);
+                if (savedCode) {
+                    editor.setValue(savedCode);
+                }
+            }
+
+            window.toggleTheme = toggleTheme;
+            window.changeLanguage = changeLanguage;
+            window.sendMessage = sendMessage;
+            window.compileAndRun = compileAndRun;
+            window.saveCode = saveCode;
+            window.loadCode = loadCode;
+        });
+        }
+        // Animation toggling logic
+        function toggleAnimation() {
+            // Your toggle animation logic here
+        }
+// pdfTools.js
+
+// Namespace for FrizonApp
+var FrizonApp = FrizonApp || {};
+
+// Initialize any pre-requisites
+FrizonApp.initialize = function() {
+  // Setup code here, such as library initialization
+};
+
+// Utility Functions
+
+FrizonApp.isValidImageBlob = function(blob) {
+  return blob && blob.size > 0;
+};
+
+FrizonApp.isValidText = function(text) {
+  return text && text.trim().length > 0;
+};
+
+FrizonApp.log = function(message) {
+  console.log(`[FrizonApp] ${message}`);
+};
+
+// PDF Generation Functions
+
+FrizonApp.generatePDF = function() {
+  const jsPDF = window.jspdf.jsPDF;
+  const doc = new jsPDF();
+  doc.text("Hello World!", 10, 10);
+  doc.save("sample.pdf");
+};
+
+FrizonApp.generateAdvancedPDF = function(additionalText, imageElement) {
+  const jsPDF = window.jspdf.jsPDF;
+  const doc = new jsPDF();
+  doc.text("Hello World!", 10, 10);
+  doc.text(additionalText, 10, 20);
+  doc.rect(10, 30, 50, 50);
+  doc.circle(35, 55, 5);
+  doc.addImage(imageElement, 'PNG', 70, 30, 50, 50);
+  doc.save("advanced_sample.pdf");
+};
+
+FrizonApp.generateStyledPDF = function(styledText, font, color) {
+  const jsPDF = window.jspdf.jsPDF;
+  const doc = new jsPDF();
+  doc.setFont(font);
+  doc.setTextColor(color);
+  doc.text(styledText, 10, 10);
+  doc.save("styled_sample.pdf");
+};
+
+FrizonApp.generatePDFFromHTML = function(htmlString) {
+  const jsPDF = window.jspdf.jsPDF;
+  const doc = new jsPDF();
+  doc.fromHTML(htmlString, 10, 10);
+  doc.save("html_sample.pdf");
+};
+
+FrizonApp.generateMultiPagePDF = function(texts) {
+  const jsPDF = window.jspdf.jsPDF;
+  const doc = new jsPDF();
+  texts.forEach((text, i) => {
+    if (i > 0) {
+      doc.addPage();
+    }
+    doc.text(text, 10, 10);
+  });
+  doc.save("multi_page_sample.pdf");
+};
+
+FrizonApp.mergePDFs = function(pdfFiles) {
+  const jsPDF = window.jspdf.jsPDF;
+  const mergedPdf = new jsPDF();
+  pdfFiles.forEach((pdfFile, index) => {
+    if (index > 0) {
+      mergedPdf.addPage();
+    }
+    // Logic to add pdfFile content to mergedPdf
+  });
+  mergedPdf.save("merged_sample.pdf");
+};
+
+FrizonApp.addPDFMetadata = function(title, author, keywords) {
+  const jsPDF = window.jspdf.jsPDF;
+  const doc = new jsPDF();
+  doc.setProperties({
+    title,
+    author,
+    keywords
+  });
+  // Add content and save PDF here
+};
+
+FrizonApp.addPasswordProtection = function(pdfData, password) {
+  return btoa(`[protected]${password}${pdfData}`);
+};
+
+FrizonApp.addPageNumbersToPDF = function(texts) {
+  const jsPDF = window.jspdf.jsPDF;
+  const doc = new jsPDF();
+  texts.forEach((text, i) => {
+    if (i > 0) {
+      doc.addPage();
+    }
+    doc.text(text, 10, 10);
+    doc.text(`Page ${i + 1}`, 180, 290);
+  });
+  doc.save("page_numbered_sample.pdf");
+};
+
+// Encryption & Decryption
+
+FrizonApp.encryptPDF = function(pdfData, password) {
+  return btoa(password + pdfData);
+};
+
+FrizonApp.decryptPDF = function(encryptedPDFData, password) {
+  return atob(encryptedPDFData).replace(password, '');
+};
+
+// Server Operations
+
+FrizonApp.savePDFToServer = async function(pdfData) {
+  return Promise.resolve("PDF saved to server");
+};
+
+FrizonApp.readPDFFromServer = async function() {
+  return Promise.resolve("Sample PDF data from server");
+};
+
+// Batch Operations
+
+FrizonApp.generateBatchPDFs = async function(texts) {
+  const results = [];
+  for (const [index, text] of texts.entries()) {
+    try {
+      const jsPDF = window.jspdf.jsPDF;
+      const doc = new jsPDF();
+      doc.text(text, 10, 10);
+      doc.save(`batch_sample_${index + 1}.pdf`);
+      results.push(`batch_sample_${index + 1}.pdf generated successfully`);
+    } catch (error) {
+      results.push(`Failed to generate batch_sample_${index + 1}.pdf`);
+    }
+  }
+  return results;
+};
+
+// OCR Functions
+
+FrizonApp.extractText = async function(imageBlob) {
+  try {
+    const { TesseractWorker } = Tesseract;
+    const worker = new TesseractWorker();
+    const result = await worker.recognize(imageBlob);
+    return result.text;
+  } catch (error) {
+    FrizonApp.log(`Error in text extraction: ${error}`);
+    return null;
+  }
+};
+
+FrizonApp.extractTextWithLang = async function(imageBlob, lang) {
+  try {
+    const { TesseractWorker } = Tesseract;
+    const worker = new TesseractWorker();
+    const result = await worker.recognize(imageBlob, { lang });
+    return result.text;
+  } catch (error) {
+    FrizonApp.log(`Error in text extraction: ${error}`);
+    return null;
+  }
+};
+
+FrizonApp.extractTextWithProgress = async function(imageBlob, progressCallback) {
+  const { TesseractWorker } = Tesseract;
+  const worker = new TesseractWorker();
+  worker.setProgressHandler(progressCallback);
+  const result = await worker.recognize(imageBlob);
+  return result.text;
+};
+
+FrizonApp.extractBatchTexts = async function(imageBlobs) {
+  const results = await Promise.allSettled(
+    imageBlobs.map(blob => FrizonApp.extractText(blob))
+  );
+  return results.map(result => result.status === "fulfilled" ? result.value : "Failed");
+};
+
+FrizonApp.saveOCRResultsToLocalStorage = function(text, key) {
+  localStorage.setItem(`ocr_${key}`, text);
+};
+
+FrizonApp.loadOCRResultsFromLocalStorage = function(key) {
+  return localStorage.getItem(`ocr_${key}`);
+};
+
+// Local Storage Functions
+
+FrizonApp.savePDFToLocalStorage = function(pdfData, key) {
+  localStorage.setItem(key, pdfData);
+};
+
+FrizonApp.readPDFFromLocalStorage = function(key) {
+  return localStorage.getItem(key);
+};
+        const express = require('express');
+const multer = require('multer');
+const axios = require('axios');
+const sqlite3 = require('sqlite3').verbose();
+const bodyParser = require('body-parser');
+const fs = require('fs');
+const morgan = require('morgan');
+const path = require('path');
+const rateLimit = require('express-rate-limit');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const cors = require('cors');
+const nodemailer = require('nodemailer');
+const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
+const WebSocket = require('ws');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+const app = express();
+app.use(bodyParser.json());
+app.use(cors());
+
+// Initialize SQLite database with encryption
+const db = new sqlite3.Database('codebot.db', (err) => {
+  if (err) {
+    console.error(err.message);
+  }
+  console.log('Connected to the codebot.db database.');
+});
+db.run("PRAGMA foreign_keys = ON"); // Enable foreign key constraints
+
+db.run('CREATE TABLE IF NOT EXISTS generated_text (id INTEGER PRIMARY KEY AUTOINCREMENT, meta_data TEXT, text TEXT)');
+db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT, email TEXT)');
+db.run('CREATE TABLE IF NOT EXISTS analysis_jobs (id INTEGER PRIMARY KEY AUTOINCREMENT, code TEXT, language TEXT, user_id INTEGER)');
+db.run('CREATE TABLE IF NOT EXISTS analysis_results (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, code TEXT, language TEXT, result TEXT)');
+
+const app = express();
+app.use(bodyParser.json());
+app.use(cors());
+
+// Initialize SQLite database with encryption
+const db = new sqlite3.Database('codebot.db', (err) => {
+  if (err) {
+    console.error(err.message);
+  }
+  console.log('Connected to the codebot.db database.');
+});
+
+// File upload settings
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+// Logging middleware using Morgan
+const logStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
+app.use(morgan('combined', { stream: logStream }));
+
+// Rate limiting middleware for API requests
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Max 100 requests per windowMs
+  message: { "error": "Rate limit exceeded. Please try again later." }
+});
+app.use('/upload', apiLimiter);
+app.use('/analyze', apiLimiter);
+
+// Authentication middleware
+app.use((req, res, next) => {
+  // Implement your authentication logic here
+  // Verify JWT token for authentication
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ "error": "Unauthorized" });
+  }
+  jwt.verify(token, 'your_secret_key_here', (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ "error": "Unauthorized" });
+    }
+    // You can also check user roles and permissions here if needed
+    req.user = decoded;
+    next();
+  });
+});
+
+// Code validation middleware
+function validateCode(req, res, next) {
+  const code = req.body.code;
+  // Implement code validation logic here
+  if (code.trim().length === 0) {
+    return res.status(400).json({ "error": "Invalid Code" });
+  }
+  next();
+}
+
+// Endpoint for user registration
+app.post('/register', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword], (err) => {
+      if (err) {
+        return res.status(400).json({ "error": "User already exists." });
+      }
+      res.json({ "message": "User registered successfully." });
+    });
+  } catch (error) {
+    res.status(500).json({ "error": error.message });
+  }
+});
+
+// Endpoint for user login
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    db.get('SELECT * FROM users WHERE username = ?', [username], async (err, user) => {
+      if (err) {
+        return res.status(500).json({ "error": "Internal server error." });
+      }
+      if (!user) {
+        return res.status(401).json({ "error": "Authentication failed. User not found." });
+      }
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ "error": "Authentication failed. Incorrect password." });
+      }
+      const token = jwt.sign({ username: user.username }, 'your_secret_key_here', { expiresIn: '1h' });
+      res.json({ "token": token });
+    });
+  } catch (error) {
+    res.status(500).json({ "error": error.message });
+  }
+});
+
+// Endpoint for file upload and text generation
+app.post('/upload', upload.single('file'), async (req, res) => {
+  const file_content = req.file.buffer.toString('utf-8');
+
+  try {
+    // Make an API call to the GPT-2 endpoint for text generation
+    const response = await axios.post('http://your-gpt2-api-endpoint', {
+      text: file_content
+    });
+    const generated_text = response.data.generated_text;
+    const meta_data = JSON.stringify({ file_name: req.file.originalname });
+
+    // Store generated text in SQLite database asynchronously
+    await insertGeneratedText(meta_data, generated_text);
+
+    res.json({ "status": "success", "generated_text": generated_text });
+  } catch (error) {
+    res.status(500).json({ "error": error.message });
+  }
+});
+
+// Endpoint for downloading generated text
+app.get('/download/:file_id', (req, res) => {
+  const file_id = req.params.file_id;
+  const sql = "SELECT * FROM generated_text WHERE id = ?";
+  db.get(sql, [file_id], (err, row) => {
+    if (err) {
+      return res.status(400).json({ "error": err.message });
+    }
+    res.json({ "meta_data": JSON.parse(row.meta_data), "generated_text": row.text });
+  });
+});
+
+// Endpoint for code analysis (Placeholder using Python's exec())
+app.post('/analyze', validateCode, async (req, res) => {
+  const code = req.body.code;
+  const language = req.body.language;
+  const user_id = req.user.id;
+
+  try {
+    // Add the analysis job to the job queue
+    const job = {
+      code,
+      language,
+      user_id
+    };
+    jobQueue.push(job);
+
+    res.json({ "message": "Analysis job added to the queue. You will be notified when it's complete." });
+  } catch (error) {
+    res.status(500).json({ "error": error.message });
+  }
+});
+
+// Create a job queue for code analysis using Worker Threads
+const jobQueue = [];
+
+// Worker function for code analysis
+function analyzeCodeWorker() {
+  parentPort.on('message', async (job) => {
+    const { code, language, user_id } = job;
+    try {
+      let analysisResult = '';
+
+      // Implement code analysis logic for different languages
+      switch (language) {
+        case 'python':
+          analysisResult = await analyzePythonCode(code);
+          break;
+        case 'javascript':
+          analysisResult = await analyzeJavaScriptCode(code);
+          break;
+        // Add more language cases as needed
+        default:
+          analysisResult = 'Unsupported language for analysis.';
+      }
+
+      // Store analysis result in the database
+      await storeAnalysisResult(user_id, code, language, analysisResult);
+      // Notify the user via email
+      await sendEmailNotification(user_id, analysisResult);
+
+      // Signal that the job is complete
+      parentPort.postMessage({ "message": "Analysis job complete" });
+    } catch (error) {
+      console.error(error);
+      // Handle errors and notify the user
+      await storeAnalysisResult(user_id, code, language, 'Error occurred during analysis.');
+      // Notify the user via email about the error
+      await sendEmailNotification(user_id, 'Error occurred during analysis.');
+    }
+  });
+}
+
+// Initialize a pool of worker threads
+const numWorkers = 4;
+for (let i = 0; i < numWorkers; i++) {
+  new Worker(__filename, { workerData: {} });
+}
+
+// Helper function to insert generated text into SQLite asynchronously
+function insertGeneratedText(meta_data, generated_text) {
+  return new Promise((resolve, reject) => {
+    db.run(`INSERT INTO generated_text (meta_data, text) VALUES (?, ?)`, [meta_data, generated_text], function (err) {
+      if (err) {
+        reject(err);
+      }
+      resolve();
+    });
+  });
+}
+
+// Simulated Python code analysis function with a Promise
+function analyzePythonCode(code) {
+  return new Promise((resolve, reject) => {
+    // Implement actual code analysis logic here using Python's exec() or other methods
+    setTimeout(() => {
+      const analysisResult = "This is a placeholder Python analysis result. Replace with your logic.";
+      resolve(analysisResult);
+    }, 1000); // Simulate an asynchronous operation
+  });
+}
+
+// Simulated JavaScript code analysis function with a Promise
+function analyzeJavaScriptCode(code) {
+  return new Promise((resolve, reject) => {
+    // Implement actual code analysis logic here for JavaScript
+    setTimeout(() => {
+      const analysisResult = "This is a placeholder JavaScript analysis result. Replace with your logic.";
+      resolve(analysisResult);
+    }, 1000); // Simulate an asynchronous operation
+  });
+}
+
+// Function to store analysis results in the database
+function storeAnalysisResult(user_id, code, language, result) {
+  return new Promise((resolve, reject) => {
+    db.run(`INSERT INTO analysis_results (user_id, code, language, result) VALUES (?, ?, ?, ?)`, [user_id, code, language, result], function (err) {
+      if (err) {
+        reject(err);
+      }
+      resolve();
+    });
+  });
+}
+
+// Function to send email notifications
+async function sendEmailNotification(user_id, result) {
+  try {
+    const user = await getUserById(user_id);
+    if (user && user.email) {
+      const transporter = nodemailer.createTransport({
+        service: 'your_email_service',
+        auth: {
+          user: 'your_email_username',
+          pass: 'your_email_password',
+        },
+      });
+      const mailOptions = {
+        from: 'your_email_address',
+        to: user.email,
+        subject: 'Code Analysis Notification',
+        text: `Your code analysis result: ${result}`,
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error(error);
+        }
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Function to get user details by ID
+function getUserById(user_id) {
+  return new Promise((resolve, reject) => {
+    db.get(`SELECT * FROM users WHERE id = ?`, [user_id], (err, user) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(user);
+    });
+  });
+}
+
+// WebSocket API for real-time updates
+const wss = new WebSocket.Server({ server: app });
+wss.on('connection', (ws) => {
+  ws.on('message', (message) => {
+    console.log(`Received message: ${message}`);
+  });
+
+  // Send a welcome message to the connected client
+  ws.send('Welcome to the CodeBot WebSocket API!');
+});
+
+// Starting the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+
+// JWT middleware for user authentication
+function authenticateToken(req, res, next) {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ "error": "Unauthorized" });
+  }
+  jwt.verify(token, 'your_secret_key_here', (err, user) => {
+    if (err) {
+      return res.status(403).json({ "error": "Invalid token" });
+    }
+    req.user = user;
+    next();
+  });
+}
+
+// Endpoint for user registration
+app.post('/register', async (req, res) => {
+  const { username, password, email } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    db.run('INSERT INTO users (username, password, email) VALUES (?, ?, ?)', [username, hashedPassword, email], (err) => {
+      if (err) {
+        return res.status(400).json({ "error": "User already exists." });
+      }
+      res.json({ "message": "User registered successfully." });
+    });
+  } catch (error) {
+    res.status(500).json({ "error": error.message });
+  }
+});
+
+// JWT middleware for user authentication
+function authenticateToken(req, res, next) {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ "error": "Unauthorized" });
+  }
+  jwt.verify(token, 'your_secret_key_here', (err, user) => {
+    if (err) {
+      return res.status(403).json({ "error": "Invalid token" });
+    }
+    req.user = user;
+    next();
+  });
+}
+
+// Endpoint for user registration
+app.post('/register', async (req, res) => {
+  const { username, password, email } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    db.run('INSERT INTO users (username, password, email) VALUES (?, ?, ?)', [username, hashedPassword, email], (err) => {
+      if (err) {
+        return res.status(400).json({ "error": "User already exists." });
+      }
+      res.json({ "message": "User registered successfully." });
+    });
+  } catch (error) {
+    res.status(500).json({ "error": error.message });
+  }
+});
+
+// ... (Remaining code)
+
+// Swagger API documentation setup
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Starting the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+// Swagger API documentation setup
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Starting the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+        // bot-file.js
+
+let retryCount = {};
+let xhrObjects = {};
+
+async function handleFileSelect(event) {
+  const files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+
+    // Generate thumbnail preview and metadata display
+    const previewElement = createPreview(file);
+
+    // Upload the file asynchronously
+    uploadFile(file, previewElement);
+  }
+}
+
+function createPreview(file) {
+  const previewElement = document.createElement('div');
+  previewElement.className = 'preview';
+
+  if (file.type.startsWith('image/')) {
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    img.height = 60;
+    img.onload = function() {
+      URL.revokeObjectURL(this.src);
+    }
+    previewElement.appendChild(img);
+  }
+
+  const metadata = document.createElement('span');
+  metadata.innerText = `${file.name} (${file.type}, ${file.size} bytes)`;
+  previewElement.appendChild(metadata);
+
+  const progressBar = document.createElement('progress');
+  progressBar.value = 0;
+  progressBar.max = 100;
+  previewElement.appendChild(progressBar);
+
+  const cancelButton = document.createElement('button');
+  cancelButton.innerText = 'Cancel';
+  cancelButton.onclick = function() {
+    const xhr = xhrObjects[file.name];
+    if (xhr) xhr.abort();
+  };
+  previewElement.appendChild(cancelButton);
+
+  document.getElementById('preview').appendChild(previewElement);
+
+  return { progressBar };
+}
+
+async function uploadFile(file, { progressBar }) {
+  const xhr = new XMLHttpRequest();
+  xhrObjects[file.name] = xhr;
+
+  const formData = new FormData();
+  formData.append('file', file, file.name);
+
+  xhr.upload.addEventListener('progress', function(event) {
+    if (event.lengthComputable) {
+      const percentComplete = Math.round((event.loaded / event.total) * 100);
+      progressBar.value = percentComplete;
+    }
+  }, false);
+
+  xhr.open('POST', 'YOUR_SERVER_ENDPOINT_HERE', true);
+
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      displayMessage(`File uploaded successfully: ${file.name}`, true);
+    } else {
+      retryUpload(file);
+    }
+  };
+
+  xhr.onerror = function() {
+    retryUpload(file);
+  };
+
+  xhr.send(formData);
+}
+
+function retryUpload(file) {
+  const retries = retryCount[file.name] || 0;
+  if (retries < 3) {
+    retryCount[file.name] = retries + 1;
+    uploadFile(file);
+  } else {
+    displayMessage(`Max retries reached for: ${file.name}`);
+  }
+}
+
+function displayMessage(message, isSuccess = false) {
+  const msgDiv = document.createElement('div');
+  msgDiv.innerText = message;
+  msgDiv.className = isSuccess ? 'success' : 'error';
+  document.getElementById('messages').appendChild(msgDiv);
+}
+
+document.getElementById('fileInput').addEventListener('change', handleFileSelect, false);
+document.getElementById('dropZone').addEventListener('drop', handleFileSelect, false);
+        const FrizonApp = {
+  // Previous methods here
+
+  // Google Search
+  googleSearch: function(query) {
+    const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+    window.open(url, '_blank');
+  },
+
+  // Bing Search
+  bingSearch: function(query) {
+    const url = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+    window.open(url, '_blank');
+  },
+
+  // Safari Search (Note: Cannot directly search via Safari, so using Google as default engine)
+  safariSearch: function(query) {
+    const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+    window.open(url, '_blank');
+  },
+
+  // Chrome Search (Note: Cannot directly search via Chrome, so using Google as default engine)
+  chromeSearch: function(query) {
+    const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+    window.open(url, '_blank');
+  },
+
+  // Image Search on Google
+  googleImageSearch: function(query) {
+    const url = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`;
+    window.open(url, '_blank');
+  },
+
+  // Image Search on Bing
+  bingImageSearch: function(query) {
+    const url = `https://www.bing.com/images/search?q=${encodeURIComponent(query)}`;
+    window.open(url, '_blank');
+  },
+        }
+        )};
+  // ... (your other functionalities like PDF tools, scanning, etc.)
+};
