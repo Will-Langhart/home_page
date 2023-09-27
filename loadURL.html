@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Friz AI - Dynamic Iframe and Button</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Global Styles */
+        body, html {
+            margin: 0;
+            padding: 10px;
+            height: 100%;
+        }
+        /* ChatGPT-Inspired Iframe Styles */
+        .webpage-frame {
+            width: 100%;
+            height: 80vh;
+            border: none;
+        }
+        /* Friz AI and ChatGPT-Inspired Button Styles */
+        .frizai-button {
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            opacity: 0.5;
+            font-size: 18px;
+            font-weight: bold;
+            animation: buttonGlow 2s infinite alternate;
+        }
+        .frizai-button:hover {
+            opacity: 1;
+        }
+        /* Keyframe Animations */
+        @keyframes buttonGlow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- User Input Fields -->
+    <input type="text" id="urlInput" placeholder="Enter URL">
+    <input type="text" id="buttonText" placeholder="Enter Button Text">
+    <button onclick="generateIframe()">Generate</button>
+    <button id="downloadBtn">Download</button>
+
+    <!-- Dynamic Iframe and Button Container -->
+    <div id="dynamicContainer"></div>
+
+    <script>
+        // Function to Generate Iframe and Button
+        function generateIframe() {
+            const url = document.getElementById('urlInput').value;
+            const buttonText = document.getElementById('buttonText').value;
+
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.className = 'webpage-frame';
+
+            const button = document.createElement('button');
+            button.className = 'frizai-button';
+            button.innerHTML = buttonText;
+            button.onclick = function() {
+                window.open(url, '_blank');
+            };
+
+            const container = document.getElementById('dynamicContainer');
+            container.innerHTML = ''; // Clear previous content
+            container.appendChild(button);
+            container.appendChild(iframe);
+
+            // Enable Download Button
+            document.getElementById('downloadBtn').disabled = false;
+        }
+
+        // Function to Download Iframe as HTML File
+        function downloadIframe() {
+            const container = document.getElementById('dynamicContainer');
+            const html = container.innerHTML;
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'iframe.html';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Disable Download Button Initially
+        document.getElementById('downloadBtn').disabled = true;
+
+        // Attach Download Function to Button
+        document.getElementById('downloadBtn').addEventListener('click', downloadIframe);
+    </script>
+
+</body>
+</html>
