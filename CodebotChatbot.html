@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Friz AI - Codebot Chatbot</title>
+    <style>
+        #editor {
+            height: 400px;
+            width: 50%;
+            float: left;
+        }
+        .code-highlight {
+            color: blue;
+        }
+        #chatBox, #output, #errorOutput, #fileInfo {
+            margin-top: 20px;
+            width: 45%;
+            float: right;
+        }
+    </style>
+    <script>
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs' } });
+    </script>
+</head>
+<body>
+    <div id="editor"></div>
+    <!-- Additional interface elements -->
+    <select id="languageSelect" onchange="changeLanguage()">
+        <option value="javascript">JavaScript</option>
+        <option value="python">Python</option>
+        <option value="html">HTML</option>
+        <option value="json">JSON</option>
+        <option value="txt">Text</option>
+    </select>
+    <button onclick="toggleTheme()">Toggle Theme</button>
+    <button onclick="compileAndRun()">Compile and Run</button>
+    <button onclick="saveCode()">Save Code</button>
+    <button onclick="loadCode()">Load Code</button>
+    <button onclick="undoCode()">Undo</button>
+    <button onclick="redoCode()">Redo</button>
+    <button onclick="insertSnippet()">Insert Snippet</button>
+    <button onclick="commentCode()">Comment</button>
+    <button onclick="uncommentCode()">Uncomment</button>
+    <button onclick="clearEditor()">Clear Editor</button>
+    <input type="file" id="fileInput" accept=".js,.py,.html,.json,.txt" onchange="uploadCode()"/>
+    <button onclick="downloadCode()">Download Code</button>
+    <input id="userInput" type="text" placeholder="Ask AI">
+    <button onclick="sendMessage()">Send</button>
+    <div id="chatBox"></div>
+    <div id="output"></div>
+    <div id="errorOutput"></div>
+    <div id="fileInfo"></div>
+    <script>
+        // Initialize Monaco Editor
+        require(['vs/editor/editor.main'], function () {
+            window.editor = monaco.editor.create(document.getElementById('editor'), {
+                value: '// Your code here...',
+                language: 'javascript',
+                theme: 'vs-dark'
+            });
+        });
+
+        // Advanced Functions
+        function toggleTheme() {
+            // Logic to toggle theme
+        }
+
+        function changeLanguage() {
+            const language = document.getElementById('languageSelect').value;
+            monaco.editor.setModelLanguage(editor.getModel(), language);
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('userInput').value;
+            const chatBox = document.getElementById('chatBox');
+            const message = document.createElement('div');
+            message.innerHTML = `<span>User: ${userInput}</span>`;
+            chatBox.appendChild(message);
+        }
+
+        function compileAndRun() {
+            try {
+                const code = editor.getValue();
+                const output = eval(code);
+                document.getElementById('output').innerText = `Output: ${output}`;
+            } catch (error) {
+                document.getElementById('errorOutput').innerText = `Compilation Error: ${error.message}`;
+            }
+        }
+
+        function saveCode() {
+            const code = editor.getValue();
+            localStorage.setItem('storedCode', code);
+        }
+
+        function loadCode() {
+            const storedCode = localStorage.getItem('storedCode');
+            if (storedCode) {
+                editor.setValue(storedCode);
+            }
+        }
+
+        function undoCode() {
+            editor.trigger('anyString', 'undo', {});
+        }
+
+        function redoCode() {
+            editor.trigger('anyString', 'redo', {});
+        }
+
+        function insertSnippet() {
+            const snippet = "// Code snippet inserted here";
+            editor.setValue(editor.getValue() + '\n' + snippet);
+        }
+
+        function commentCode() {
+            const selection = editor.getSelection();
+            const selectedLines = editor.getModel().getValueInRange(selection).split('\n');
+            const commentedLines = selectedLines.map(line => `// ${line}`).join('\n');
+            editor.executeEdits('', [
+                { range: selection, text: commentedLines }
+            ]);
+        }
+
+        function uncommentCode() {
+            const selection = editor.getSelection();
+            const selectedLines = editor.getModel().getValueInRange(selection).split('\n');
+            const uncommentedLines = selectedLines.map(line => line.startsWith('// ') ? line.substring(3) : line).join('\n');
+            editor.executeEdits('', [
+                { range: selection, text: uncommentedLines }
+            ]);
+        }
+
+        function clearEditor() {
+            editor.setValue('');
+        }
+
+        function uploadCode() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function() {
+                editor.setValue(reader.result);
+                const ext = file.name.split('.').pop();
+                const languageMap = {
+                    'js': 'javascript',
+                    'py': 'python',
+                    'html': 'html',
+                    'json': 'json',
+                    'txt': 'plaintext'
+                };
+                const detectedLanguage = languageMap[ext] || 'plaintext';
+                monaco.editor.setModelLanguage(editor.getModel(), detectedLanguage);
+            };
+            reader.readAsText(file);
+        }
+
+        function downloadCode() {
+            const blob = new Blob([editor.getValue()], { type: 'text/plain;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'code.txt';
+            a.click();
+        }
+    </script>
+</body>
+</html>
+
