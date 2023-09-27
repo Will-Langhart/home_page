@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Code Editor</title>
+    <!-- Include Monaco Editor styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs/editor/editor.main.min.css">
+    <style>
+        /* Add custom styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .editor-header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+        .editor-options {
+            display: flex;
+            gap: 10px;
+        }
+        .editor {
+            flex: 1;
+        }
+        .editor-controls {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .editor-preview {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .error-output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            color: #721c24;
+        }
+        .code-history {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow-y: scroll;
+            max-height: 200px;
+        }
+        .code-comparison {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .code-comparison textarea {
+            width: 100%;
+            height: 150px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="editor-container">
+            <div class="editor-header">
+                <h1>Advanced Code Editor</h1>
+                <div class="editor-options">
+                    <label for="languageSelect">Language:</label>
+                    <select id="languageSelect" onchange="changeLanguage()">
+                        <option value="html">HTML</option>
+                        <option value="css">CSS</option>
+                        <option value="javascript">JavaScript</option>
+                        <!-- Add more language options here -->
+                    </select>
+                    <label for="themeSelect">Theme:</label>
+                    <select id="themeSelect" onchange="changeTheme()">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                    </select>
+                </div>
+            </div>
+            <div class="editor">
+                <div id="editor" style="height: 500px;"></div>
+            </div>
+            <div class="editor-controls">
+                <button onclick="compileCode()">Compile</button>
+                <button onclick="executeCode()">Execute</button>
+                <button onclick="saveCode()">Save</button>
+                <button onclick="downloadAll()" disabled>Download All</button>
+                <button onclick="resetCode()">Reset</button>
+                <button onclick="formatCode()">Format Code</button>
+                <input type="file" id="fileInput" accept=".html,.json,.js,.py,.java">
+                <button onclick="uploadFile()">Upload</button>
+                <button onclick="addNewFile()">Add New File</button>
+                <button onclick="removeSelectedFile()">Remove Selected File</button>
+            </div>
+            <div class="editor-preview">
+                <h2>Live Preview</h2>
+                <iframe id="dynamicWebpage"></iframe>
+            </div>
+            <div class="error-output">
+                <h2>Errors and Warnings</h2>
+                <div id="errorOutput"></div>
+            </div>
+            <div class="code-history">
+                <h2>Code History</h2>
+                <ul id="codeHistoryList"></ul>
+            </div>
+            <div class="code-comparison">
+                <h2>Code Comparison</h2>
+                <textarea id="codeComparisonTextarea" placeholder="Compare code..."></textarea>
+                <button onclick="compareCode()">Compare</button>
+                <div id="codeComparisonResult"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Monaco Editor script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs/loader.js"></script>
+    <!-- Include ESLint script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/eslint/7.32.0/eslint.min.js"></script>
+    <!-- Include Stylelint script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stylelint/14.0.0/stylelint.js"></script>
+    <!-- Include Prettier script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.5.1/prettier.min.js"></script>
+    <script>
+        // Initialize Monaco Editor
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            const editor = monaco.editor.create(document.getElementById('editor'), {
+                value: '',
+                language: 'html',
+                theme: 'vs-light' // Change to 'vs-dark' for dark theme
+            });
+
+            // Set editor options (auto suggestions and format on paste)
+            editor.updateOptions({ suggest: { autoAcceptSuggestions: true }, formatOnPaste: true });
+
+            // Initialize ESLint and Stylelint
+            const eslint = new ESLint({ fix: true });
+            const stylelint = new stylelint.Linter();
+
+            // Function to Compile and Display Webpage and JSON
+            async function compileCode() {
+                // Get code inputs
+                const code = editor.getValue();
+
+                try {
+                    // Clear previous errors and output
+                    document.getElementById('errorOutput').textContent = '';
+
+                    // Lint code based on selected language
+                    const selectedLanguage = document.getElementById('languageSelect').value;
+
+                    if (selectedLanguage === 'javascript') {
+                        // Lint JavaScript code using ESLint
+                        const eslintResults = await eslint.lintText(code);
+                        if (eslintResults && eslintResults.length > 0) {
+                            // Display ESLint warnings and errors
+                            const eslintMessages = eslintResults[0].messages;
+                            const eslintOutput = eslintMessages.map(message => `ESLint: ${message.message} (line ${message.line}, col ${message.column})`).join('\n');
+                            document.getElementById('errorOutput').textContent = eslintOutput;
+                            return;
+                        }
+                    } else if (selectedLanguage === 'css') {
+                        // Lint CSS code using Stylelint
+                        stylelint.lint({
+                            code,
+                            codeFilename: 'style.css',
+                            formatter: 'string'
+                        }).then(({ output }) => {
+                            if (output && output.length > 0) {
+                                // Display Stylelint warnings and errors
+                                document.getElementById('errorOutput').textContent = output;
+                            }
+                        });
+                    }
+
+                    // Compile code if no linting errors
+                    const iframe = document.getElementById('dynamicWebpage');
+                    const doc = iframe.contentWindow.document;
+                    doc.open();
+                    doc.write(code);
+                    doc.close();
+
+                    // Enable Download Button
+                    document.getElementById('downloadBtn').disabled = false;
+
+                    // Log code to history
+                    logCodeToHistory(code);
+                } catch (error) {
+                    // Display compilation error
+                    document.getElementById('errorOutput').textContent = error.message;
+                }
+            }
+
+            // Function to Reset Code Inputs
+            function resetCode() {
+                editor.setValue('');
+                document.getElementById('dynamicWebpage').src = 'about:blank';
+            }
+
+            // Function to Upload and Compile File
+            function uploadFile() {
+                const fileInput = document.getElementById('fileInput');
+                const file = fileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.readAsText(file);
+                    reader.onload = function (event) {
+                        const contents = event.target.result;
+                        editor.setValue(contents);
+                        compileCode();
+                    };
+                }
+            }
+
+            // Function to Download All Files as Zip
+            function downloadAll() {
+                // Creating downloadable zip file
+                const zip = new JSZip();
+                // Adding HTML code to the zip file
+                zip.file("index.html", editor.getValue());
+                // Generate zip and trigger download
+                zip.generateAsync({ type: "blob" })
+                    .then(function (content) {
+                        const a = document.createElement('a');
+                        a.href = URL.createObjectURL(content);
+                        a.download = 'code.zip';
+                        a.click();
+                    });
+            }
+
+            // Function to change the editor theme
+            function changeTheme() {
+                const select = document.getElementById('themeSelect');
+                const theme = select.value;
+                monaco.editor.setTheme(theme === 'dark' ? 'vs-dark' : 'vs-light');
+            }
+
+            // Function to change the editor language
+            function changeLanguage() {
+                const select = document.getElementById('languageSelect');
+                const language = select.value;
+                monaco.editor.setModelLanguage(editor.getModel(), language);
+            }
+
+            // Function to format code using Prettier
+            function formatCode() {
+                const code = editor.getValue();
+                const language = editor.getModel().getLanguageIdentifier().language;
+                try {
+                    const formattedCode = prettier.format(code, { parser: language });
+                    editor.setValue(formattedCode);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            // Function to execute JavaScript code
+            function executeCode() {
+                // Get the JavaScript code from the editor
+                const jsCode = editor.getValue();
+
+                try {
+                    // Clear the previous execution output
+                    document.getElementById('executionOutput').textContent = '';
+
+                    // Execute the JavaScript code
+                    const result = eval(jsCode);
+
+                    // Display the result in the output section
+                    document.getElementById('executionOutput').textContent = `Execution Result:\n${result}`;
+                } catch (error) {
+                    // Display any errors that occur during execution
+                    document.getElementById('executionOutput').textContent = `Execution Error:\n${error}`;
+                }
+            }
+
+            // Function to save code
+            function saveCode() {
+                // Get the currently selected file
+                const currentFileIndex = fileList.findIndex(file => file.content === editor.getValue());
+                if (currentFileIndex !== -1) {
+                    // Update the content of the selected file
+                    fileList[currentFileIndex].content = editor.getValue();
+                }
+            }
+
+            // Function to load code
+            function loadCode() {
+                // Get the currently selected file
+                const currentFileIndex = fileList.findIndex(file => file.content === editor.getValue());
+                if (currentFileIndex !== -1) {
+                    // Load the content of the selected file into the editor
+                    editor.setValue(fileList[currentFileIndex].content);
+                }
+            }
+
+            // Function to add a new file
+            function addNewFile() {
+                const selectedLanguage = document.getElementById('languageSelect').value;
+                const fileName = prompt('Enter a file name:');
+                if (fileName) {
+                    // Create a new file object
+                    const newFile = {
+                        name: fileName,
+                        language: selectedLanguage,
+                        content: ''
+                    };
+
+                    // Add the new file to the file list
+                    fileList.push(newFile);
+
+                    // Update the file list UI
+                    updateFileList();
+                }
+            }
+
+            // Function to remove the selected file
+            function removeSelectedFile() {
+                const selectedFileIndex = document.getElementById('fileList').selectedIndex;
+                if (selectedFileIndex !== -1) {
+                    // Remove the selected file from the file list
+                    fileList.splice(selectedFileIndex, 1);
+
+                    // Update the file list UI
+                    updateFileList();
+
+                    // Reset the editor
+                    resetCode();
+                }
+            }
+
+            // Function to update the file list UI
+            function updateFileList() {
+                const fileListElement = document.getElementById('fileList');
+                fileListElement.innerHTML = '';
+                fileList.forEach((file, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = file.name;
+                    listItem.onclick = () => loadFileAtIndex(index);
+                    fileListElement.appendChild(listItem);
+                });
+            }
+
+            // Function to load a file at a specific index
+            function loadFileAtIndex(index) {
+                if (index >= 0 && index < fileList.length) {
+                    // Load the content of the selected file into the editor
+                    editor.setValue(fileList[index].content);
+                }
+            }
+
+            // Function to log code to history
+            function logCodeToHistory(code) {
+                const codeHistoryList = document.getElementById('codeHistoryList');
+                const listItem = document.createElement('li');
+                listItem.textContent = code.slice(0, 50); // Show first 50 characters
+                codeHistoryList.appendChild(listItem);
+            }
+
+            // Function to compare code
+            function compareCode() {
+                const codeComparisonTextarea = document.getElementById('codeComparisonTextarea');
+                const codeComparisonResult = document.getElementById('codeComparisonResult');
+                const currentCode = editor.getValue();
+                const comparisonCode = codeComparisonTextarea.value;
+
+                if (currentCode === comparisonCode) {
+                    codeComparisonResult.textContent = 'Code is identical.';
+                } else {
+                    // Perform a basic text comparison
+                    const diff = JsDiff.diffChars(currentCode, comparisonCode);
+                    const diffOutput = document.createElement('div');
+
+                    diff.forEach(part => {
+                        // Green for additions, red for deletions
+                        const color = part.added ? 'green' : part.removed ? 'red' : 'grey';
+                        const span = document.createElement('span');
+                        span.style.color = color;
+                        span.appendChild(document.createTextNode(part.value));
+                        diffOutput.appendChild(span);
+                    });
+
+                    codeComparisonResult.innerHTML = '';
+                    codeComparisonResult.appendChild(diffOutput);
+                }
+            }
+
+            // Initial update of the file list
+            updateFileList();
+        });
+    </script>
+</body>
+</html>
