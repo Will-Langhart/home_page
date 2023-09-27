@@ -326,7 +326,8 @@
         </div>
     </div>
 
-    <!-- Include Monaco Editor script -->
+    
+<!-- Include Monaco Editor script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs/loader.js"></script>
     <!-- Include ESLint script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/eslint/7.32.0/eslint.min.js"></script>
@@ -386,7 +387,6 @@
                             }
                         });
                     }
-
                     // Compile code if no linting errors
                     const iframe = document.getElementById('dynamicWebpage');
                     const doc = iframe.contentWindow.document;
@@ -400,7 +400,7 @@
                     // Log code to history
                     logCodeToHistory(code);
                 } catch (error) {
-                    // Display compilation error
+                    // Display compilation erro
                     document.getElementById('errorOutput').textContent = error.message;
                 }
             }
